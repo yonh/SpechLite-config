@@ -1,0 +1,43 @@
+
+# This is the local http proxy server port.
+# Note there is another SOCKS5 proxy server starts at port+1 automatically.
+port: 9090
+# Adapter is the remote proxy server you want to connect to
+adapter:
+     # id is used to distinguish adapter when defining rules.
+     # There is a 'direct' adapter that connect directly to target host without proxy.
+
+  - id: SS
+    type: ss
+    host: 
+    port: 
+    # Currently support: AES-128-CFB, AES-192-CFB, AES-256-CFB, chacha20, salsa20, rc4-md5
+    # Shadowsocks encryption methods are not fully tested, please report if there is anything not working.
+    method: 
+    password:
+  
+  - id: reject
+    type: reject
+    # It's very important to set a delay since some apps may try to reconnect repeatedly.
+    delay: 100
+
+# Here defines how things should work.
+# Rule will be matched one by one.
+rule:
+  - type: country
+  # When the location is unknown. Usually this means this is resolved an Intranet IP.
+    country: CN
+    match: true
+    adapter: direct
+
+  - type: list
+  # Reject requests based on the IP address of the host.
+    file: ~/.SpechtLite/rejectlist
+    adapter: reject
+
+  - type: all
+    adapter: SS
+#  - type: list
+  # Forward requests based on whether the host domain matches the given regular expressions.
+#    file: ~/.SpechtLite/directlist
+#    adapter: direct
