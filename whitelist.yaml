@@ -1,6 +1,6 @@
 # This is the local http proxy server port.
 # Note there is another SOCKS5 proxy server starts at port+1 automatically.
-port: 3333
+port: 9090
 # Adapter is the remote proxy server you want to connect to
 adapter:
      # id is used to distinguish adapter when defining rules.
@@ -10,7 +10,7 @@ adapter:
   # Shadowsocks encryption methods are not fully tested, please report if there is anything not working.
   - id: SS
     type: ss
-    host:
+    host: 
     port: 
     method: 
     password: 
@@ -23,10 +23,9 @@ adapter:
 # Here defines how things should work.
 # Rule will be matched one by one.
 rule:
-  # When the location is unknown. Usually this means this is resolved an Intranet IP.
-  - type: country
-    country: CN
-    match: true
+  # Forward requests based on whether the host domain matches the given regular expressions.
+  - type: list
+    file: ~/.SpechtLite/directlist
     adapter: direct
 
   # Reject requests based on the IP address of the host.
@@ -34,10 +33,17 @@ rule:
     file: ~/.SpechtLite/rejectlist
     adapter: reject
 
-  # Forward requests based on whether the host domain matches the given regular expressions.
-  - type: list
-    file: ~/.SpechtLite/directlist
+  # When the location is unknown. Usually this means this is resolved an Intranet IP.
+  - type: country
+    country: CN
+    match: true
     adapter: direct
 
-  - type: all
+  - type: country
+    # 当无法找到对应IP的地理位置信息时会返回“--”，这通常意味着这是一个内网IP。
+    country: --
+    match: true
+    adapter: direct
+
+    - type: all
     adapter: SS
