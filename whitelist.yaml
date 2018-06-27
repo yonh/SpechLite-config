@@ -33,6 +33,11 @@ rule:
     file: ~/.SpechtLite/rejectlist
     adapter: reject
 
+  # Forward requests based on whether the host domain matches the given regular expressions.
+  - type: list
+    file: ~/.SpechtLite/proxylist
+    adapter: SS
+
   # When the location is unknown. Usually this means this is resolved an Intranet IP.
   - type: country
     country: CN
@@ -45,5 +50,5 @@ rule:
     match: true
     adapter: direct
 
-    - type: all
+  - type: all
     adapter: SS
