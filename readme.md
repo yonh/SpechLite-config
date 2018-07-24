@@ -3,6 +3,10 @@
 - [ ] 添加脚本批量替换配置
 
 
+### ubuntu源访问不了的问题
+或许是因为通过代理访问ubuntu源比较慢的原因，导致ubuntu容器一律使用不了`apt update`
+在directlist加入`archive.ubuntu.com`和`security.ubuntu.com`解决了问题
+
 ### 配置内网IP直连
 #### 1. 配置direct模式
 ```
